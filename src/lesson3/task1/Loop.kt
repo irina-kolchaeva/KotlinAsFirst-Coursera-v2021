@@ -3,6 +3,8 @@
 package lesson3.task1
 
 import kotlin.math.sqrt
+import lesson1.task1.sqr
+import kotlin.math.pow
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -72,7 +74,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var count = 0
+    var number = n
+    do {
+        count++
+        number /= 10
+    } while (number != 0)
+    return count
+}
 
 /**
  * Простая (2 балла)
@@ -80,7 +90,18 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var a = 1
+    var b = 1
+    var c = 0
+    if (n <= 2) return 1
+    for (i in 3..n) {
+        c = a + b
+        a = b
+        b = c
+    }
+    return c
+}
 
 /**
  * Простая (2 балла)
@@ -138,7 +159,19 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    val c = digitNumber(n) - 1
+    var n2 = n
+    var n3 = 0
+    var counter = 10.0.pow(c).toInt()
+    for (i in 0..c) {
+        val n1 = n2 % 10
+        n3 += n1 * counter
+        counter /= 10
+        n2 /= 10
+    }
+    return n3
+}
 
 /**
  * Средняя (3 балла)
@@ -149,7 +182,7 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean = (n == revert(n))
 
 /**
  * Средняя (3 балла)
@@ -192,7 +225,17 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var c = 0
+    var k = 0
+    var p = 1
+    while (c < n) {
+        k = sqr(p)
+        c += digitNumber(k)
+        p += 1
+    }
+    return k / 10.0.pow(c - n).toInt() % 10
+}
 
 /**
  * Сложная (5 баллов)
@@ -203,4 +246,14 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var c = 0
+    var k = 0
+    var p = 1
+    while (c < n) {
+        k = fib(p)
+        c += digitNumber(k)
+        p += 1
+    }
+    return k / 10.0.pow(c - n).toInt() % 10
+}
