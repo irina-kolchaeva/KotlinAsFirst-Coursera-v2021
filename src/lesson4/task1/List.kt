@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.sqrt
+import kotlin.math.pow
 
 // Урок 4: списки
 // Максимальное количество баллов = 12
@@ -120,14 +121,27 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double {
+    var c = 0.0
+    for (i in v) {
+        c += i.pow(2.0)
+    }
+    return sqrt(c)
+}
 
 /**
  * Простая (2 балла)
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double {
+    var c = 0.0
+    if (list.isEmpty()) return 0.0
+    for (i in list) {
+        c += i
+    }
+    return (c / list.size)
+}
 
 /**
  * Средняя (3 балла)
@@ -177,7 +191,19 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    val list = mutableListOf<Int>()
+    var num = n
+    var i = 2
+    while (num > 1) {
+        while (num % i == 0) {
+            list.add(i)
+            num /= i
+        }
+        i += 1
+    }
+    return list
+}
 
 /**
  * Сложная (4 балла)
@@ -186,7 +212,7 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя (3 балла)
@@ -241,7 +267,21 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var num = n
+    var str = ""
+    var i = 12
+    val rim = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val nat = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    while (num > 0) {
+        while (num >= nat[i]) {
+            str += rim[i]
+            num -= nat[i]
+        }
+        i -= 1
+    }
+    return str
+}
 
 /**
  * Очень сложная (7 баллов)
