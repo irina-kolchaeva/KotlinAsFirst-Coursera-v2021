@@ -75,7 +75,9 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    TODO()
+}
 
 
 /**
@@ -113,7 +115,19 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val outputName1 = File(outputName).bufferedWriter()
+    var lineMax = 0
+    for (line in File(inputName).readLines()) {
+        if (line.trim().length >= lineMax) lineMax = line.trim().length
+    }
+    for (line in File(inputName).readLines()) {
+        if (line.length < lineMax) {
+            for (i in 0 until (lineMax - line.trim().length) / 2) outputName1.write(" ")
+        }
+        outputName1.write(line.trim())
+        outputName1.newLine()
+    }
+    outputName1.close()
 }
 
 /**
@@ -144,7 +158,51 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val outputName1 = File(outputName).bufferedWriter()
+    var lineMax = 0
+    val res = mutableListOf<String>()
+    for (line in File(inputName).readLines()) {
+        var str = ""
+        for (element in line.trim().split(" ")) {
+            if (element != "") {
+                str += "$element "
+            }
+        }
+        res.add(str.trim())
+        if (lineMax <= str.length - 1) {
+            lineMax = str.length - 1
+        }
+    }
+    for (i in res) {
+        val c = i.split(" ")
+        var str = ""
+        if (lineMax == i.length || c.size == 1) {
+            outputName1.write(i)
+        } else {
+            val k = c.size - 1
+            val n = lineMax - i.length + k
+            val a = n / k
+            if (a * k == n) {
+                for (element in c) {
+                    str += element
+                    for (j in 0 until a) str += " "
+                }
+            } else {
+                val z = n - a * k
+                for (element in 0 until c.size) {
+                    str += c[element]
+                    if (element >= z)
+                        for (j in 0 until a) str += " "
+                    else
+                        for (j in 0..a) str += " "
+
+                }
+            }
+        }
+        outputName1.write(str.trim())
+        outputName1.newLine()
+    }
+    outputName1.close()
 }
 
 /**
