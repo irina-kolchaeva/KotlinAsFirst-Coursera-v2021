@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import kotlin.math.pow
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -114,7 +116,22 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val list = jumps.split(" ")
+    var max = -1
+    var c = 0
+    for (i in list.indices) {
+        if (list[i] == "-" || list[i] == "%") continue
+        try {
+            val res = list[i].toInt()
+            if (res > max) max = res
+        } catch (e: Exception) {
+            c += 1
+        }
+    }
+    return if (c != 0) -1
+    else max
+}
 
 /**
  * Сложная (6 баллов)
@@ -213,4 +230,50 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    require(commands.matches(Regex("""[+\-\]\[\s><]*""")))
+    val list = mutableListOf<Int>()
+    var k = cells / 2
+    var l = 0
+    for (i in commands.indices) {
+        if (commands[i] == '[') l += 1
+        else if (commands[i] == ']') l -= 1
+        if (l == -1) throw IllegalArgumentException()
+    }
+    if (l != 0) throw IllegalArgumentException()
+    for (i in 0 until cells) list.add(0)
+    if (commands == "") return list
+    var i = 0
+    var index = 0
+    while (i != commands.length && index != limit) {
+        if (k == -1 || k == list.size) throw IllegalStateException()
+        when (commands[i]) {
+            '+' -> list[k] += 1
+            '-' -> list[k] -= 1
+            '>' -> k += 1
+            '<' -> k -= 1
+            ' ' -> list[k]
+            '[' -> {
+                if (list[k] == 0) i = computeDeviceCells1(commands, i, 2)
+            }
+            ']' -> {
+                if (list[k] != 0) i = computeDeviceCells1(commands, i, 1)
+            }
+        }
+        i += 1
+        index += 1
+        if (k < 0 || k >= cells) throw IllegalStateException()
+    }
+    return list
+}
+
+fun computeDeviceCells1(commands: String, i1: Int, power: Int): Int {
+    var c = 1
+    var i = i1
+    while (c != 0) {
+        i += (-1.0).pow(power).toInt()
+        if (commands[i] == '[') c += (-1.0).pow(power).toInt()
+        else if (commands[i] == ']') c += (-1.0).pow(power + 1).toInt()
+    }
+    return i
+}
